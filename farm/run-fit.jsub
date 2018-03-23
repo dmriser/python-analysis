@@ -1,0 +1,44 @@
+JOBNAME:     kp-bsa
+TRACK:       simulation
+OS:          centos7
+PROJECT:     clas12
+TIME:        720
+DISK_SPACE:  1024 MB
+MEMORY:      2048 MB
+
+COMMAND:   chmod +x go.csh; ./go.csh input.csv 
+
+INPUT_DATA:input.csv
+
+INPUT_FILES:/u/home/dmriser/clas/python-analysis/kaon-bsa/results/phi-dist-sys.csv 
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_alpha_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_alpha_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_cc_0.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_cc_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_dcr1_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_dcr1_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_dcr3_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_dcr3_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ec_edep_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ec_edep_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecsf_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecsf_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecu_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecu_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecv_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecv_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecw_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecw_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_vz_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_vz_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_p_mes_0.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_p_mes_-1.csv
+
+OUTPUT_DATA:out.csv 
+
+OUTPUT_TEMPLATE:/u/home/dmriser/clas/python-analysis/kaon-bsa/database/fit/* 
+
+OTHER_FILES:
+/u/home/dmriser/clas/python-analysis/farm/go.csh
+/u/home/dmriser/environment/conda.env 
+/u/home/dmriser/clas/python-analysis/kaon-bsa/fit-playground.py
