@@ -6,11 +6,11 @@ TIME:        720
 DISK_SPACE:  1024 MB
 MEMORY:      2048 MB
 
-COMMAND:   chmod +x go.csh; ./go.csh input.csv 
+COMMAND:   chmod +x go.csh; ./go.csh 
 
 INPUT_DATA:input.csv
 
-INPUT_FILES:/u/home/dmriser/clas/python-analysis/kaon-bsa/results/phi-dist-sys.csv 
+INPUT_FILES:/u/home/dmriser/clas/python-analysis/kaon-bsa/results/phi/sys.csv 
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_alpha_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_alpha_1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_cc_0.csv
@@ -41,4 +41,4 @@ OUTPUT_TEMPLATE:/u/home/dmriser/clas/python-analysis/kaon-bsa/database/fit/*
 OTHER_FILES:
 /u/home/dmriser/clas/python-analysis/farm/go.csh
 /u/home/dmriser/environment/conda.env 
-/u/home/dmriser/clas/python-analysis/kaon-bsa/fit-playground.py
+/u/home/dmriser/clas/python-analysis/kaon-bsa/vegas-fitter.py

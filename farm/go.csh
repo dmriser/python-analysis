@@ -4,4 +4,4 @@
 source conda.env 
 
 # do the job 
-./fit-playground.py -i=input.csv -o=out.csv -n=4000
+./vegas-fitter.py -i=input.csv -o=out.csv -n=8000
