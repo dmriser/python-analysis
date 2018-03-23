@@ -73,7 +73,7 @@ def fit(input_file, output_file, n_samples):
         
         axis_bins = np.unique(axis_data.axis_bin)
         for axis_bin in tqdm.tqdm(axis_bins):
-            data = dataset.query('axis_bin == %d' % axis_bin)
+            data = axis_data.query('axis_bin == %d' % axis_bin)
 
             # perform vegas integration 
             result = perform_vegas(integrand, bounds, data.phi, data.value, 
