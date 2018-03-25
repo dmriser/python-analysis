@@ -77,7 +77,7 @@ def fit(input_file, output_file, n_samples):
 
             # perform vegas integration 
             result = perform_vegas(integrand, bounds, data.phi, data.value, 
-                                   data.stat, physics_model, 12, n_samples
+                                   np.sqrt(data.stat**2 + data.sys_total**2), physics_model, 12, n_samples
                                    )
 
             output_data['axis'].append(axis)
