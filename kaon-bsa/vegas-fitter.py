@@ -8,6 +8,7 @@ import vegas
 
 TO_RADIANS = np.pi/180.0
 TO_DEGREES = 1/TO_RADIANS
+PRIOR_WIDTH = 0.1
 
 def physics_model(phi, a):
     return a[0]*np.sin(phi*TO_RADIANS)/(1+a[1]*np.cos(phi*TO_RADIANS)+a[2]*np.cos(2*phi*TO_RADIANS))
@@ -15,20 +16,23 @@ def physics_model(phi, a):
 def likelihood(data, theory, error):
     return np.exp(-0.5*np.sum(((data-theory)/error)**2))
 
+def prior(a):
+    return np.exp(-0.5*(a[1]/PRIOR_WIDTH)**2)*np.exp(-0.5*(a[2]/PRIOR_WIDTH)**2)
+
 def integrand(phi, data, error, model, a):
     theory = model(phi, a)
-    f = likelihood(data, theory, error)
+    f = likelihood(data, theory, error)*prior(a)
     return [f, f*a[0], f*a[1], f*a[2], 
             f*a[0]**2, f*a[1]**2, f*a[2]**2]
 
 def perform_vegas(integrand, bounds, phi, data, error, model, n_iter, n_eval):
     vegas_integrator = vegas.Integrator(bounds)
-    
-    # burning some 
-    vegas_integrator(lambda p: integrand(phi, data, error, model, p), 
-                    nitn=4, 
-                    neval=1000)
-    
+
+    # burning some
+    vegas_integrator(lambda p: integrand(phi, data, error, model, p),
+                     nitn=4,
+                     neval=1000)
+
     result = vegas_integrator(lambda p: integrand(phi, data, error, model, p), 
                     nitn=n_iter, 
                     neval=n_eval)
@@ -77,8 +81,7 @@ def fit(input_file, output_file, n_samples):
 
             # perform vegas integration 
             result = perform_vegas(integrand, bounds, data.phi, data.value, 
-                                   np.sqrt(data.stat**2 + data.sys_total**2), physics_model, 12, n_samples
-                                   )
+                                   data.stat, physics_model, 12, n_samples)
 
             output_data['axis'].append(axis)
             output_data['axis_bin'].append(axis_bin)
