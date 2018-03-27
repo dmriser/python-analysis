@@ -11,6 +11,29 @@ from scipy.optimize import minimize
 TO_RADIANS = np.pi/180.0
 TO_DEGREES = 1/TO_RADIANS
 
+def create_replica(y, y_err):
+    y_rep = [np.random.normal(yp,np.fabs(yp_err)) for yp,yp_err in zip(y,y_err)]
+    return np.array(y_rep)
+
+def perform_bootstrap(loss_function, physics_model, bounds,
+                      phi, data, error, n_replicas=20):
+    results = []
+    for irep in tqdm.tqdm(range(n_replicas)):
+        rep = create_replica(data, error) 
+        pars,errs = perform_single(loss_function, physics_model, bounds, phi, rep, error)
+        results.append(pars)
+
+    
+    results = np.array(results, dtype=np.float32)
+
+    pars = []
+    errs = []
+    for ipar in range(3):
+        pars.append(np.average(results[:,ipar]))
+        errs.append(np.std(results[:,ipar]))    
+
+    return pars, errs 
+
 def physics_model(phi, a):
     return a[0]*np.sin(phi*TO_RADIANS)/(1+a[1]*np.cos(phi*TO_RADIANS)+a[2]*np.cos(2*phi*TO_RADIANS))
 
@@ -33,7 +56,7 @@ def perform_single(loss_function, model, bounds,
     return result.x, err[0]    
 
 
-def fit(input_file, output_file, bounds):
+def fit(input_file, output_file, bounds, n_reps):
 
     # load dataset 
     dataset = pd.read_csv(input_file)
@@ -60,9 +83,9 @@ def fit(input_file, output_file, bounds):
         for axis_bin in tqdm.tqdm(axis_bins):
             data = axis_data.query('axis_bin == %d' % axis_bin)
 
-            # perform vegas integration 
-            pars, errs = perform_single(loss_function, physics_model, bounds, 
-                                    data.phi, data.value, data.stat)
+            # perform single fitting 
+            pars, errs = perform_bootstrap(loss_function, physics_model, bounds, 
+                                           data.phi, data.value, data.stat, n_reps)
 
             output_data['axis'].append(axis)
             output_data['axis_bin'].append(axis_bin)
@@ -86,6 +109,7 @@ if __name__ == "__main__":
     parser.add_argument('-i', '--input_file',  required=True)
     parser.add_argument('-o', '--output_file', required=True)
     parser.add_argument('-b', '--bounded', default='no')
+    parser.add_argument('-n', '--n_replicas', default=100, type=int)
     args = parser.parse_args()
 
 
@@ -99,4 +123,4 @@ if __name__ == "__main__":
     else:
         bounds = [[-1,1],[-1,1],[-1,1]]
 
-    fit(args.input_file, args.output_file, bounds)
+    fit(args.input_file, args.output_file, bounds, args.n_replicas)
