@@ -41,4 +41,4 @@ OUTPUT_TEMPLATE:/u/home/dmriser/clas/python-analysis/kaon-bsa/database/fit/*
 OTHER_FILES:
 /u/home/dmriser/clas/python-analysis/farm/go.csh
 /u/home/dmriser/environment/conda.env 
-/u/home/dmriser/clas/python-analysis/kaon-bsa/vegas-fitter.py
+/u/home/dmriser/clas/python-analysis/kaon-bsa/replica-fitter.py

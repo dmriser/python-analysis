@@ -8,7 +8,7 @@ import vegas
 
 TO_RADIANS = np.pi/180.0
 TO_DEGREES = 1/TO_RADIANS
-PRIOR_WIDTH = 0.1
+PRIOR_WIDTH = 0.2
 
 def physics_model(phi, a):
     return a[0]*np.sin(phi*TO_RADIANS)/(1+a[1]*np.cos(phi*TO_RADIANS)+a[2]*np.cos(2*phi*TO_RADIANS))
