@@ -1,0 +1,17 @@
+{
+    "axes": [
+        "x",
+        "z",
+        "pt",
+        "q2"
+    ],
+    "file_compression": "bz2",
+    "file_path": "/Users/davidriser/Data/inclusive/inclusive_kaon_small.csv",
+    "n_bins": 10,
+    "sample_size": 100000,
+    "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations.json",
+    "z_range": [
+        0.25,
+        0.75
+    ]
+}

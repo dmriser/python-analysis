@@ -6,44 +6,13 @@
 # the beam spin asymmetry for some cuts.
 #
 
+import argparse
 import json
 import logging
 import numpy as np
 import pandas as pd
 import utils
 import time
-
-def load_dataset(config):
-
-    log = logging.getLogger(__name__)
-
-    # Load data and drop nan values.
-    data = pd.read_csv(config['file_path'],
-                       compression=config['file_compression'],
-                       nrows=config['sample_size'])
-    data.dropna(how='any', inplace=True)
-
-    log.info('Loaded dataset with size %d' % len(data))
-    log.debug('Dataframe details: %s', data.info())
-
-    # These axes will be kept, everything else will
-    # be dropped.
-    IMPORTANT_AXES = ['alpha', 'dist_cc', 'dist_cc_theta',
-                      'dist_dcr1', 'dist_dcr3', 'dist_ecsf',
-                      'dist_ec_edep', 'dist_ecu', 'dist_ecv',
-                      'dist_ecw', 'dist_vz', 'helicity',
-                      'missing_mass', 'p_mes', 'phi_h',
-                      'pt', 'q2', 'x', 'z', 'dvz']
-
-    # Perform the axis dropping.
-    for col in data.columns:
-        if col not in IMPORTANT_AXES:
-            data.drop(col, axis=1, inplace=True)
-
-    # Reduce memory usage and return loaded data for
-    # analysis.
-    data, _ = utils.reduce_mem_usage(data)
-    return data
 
 def setup_binning(config, data):
     ''' Return dictionary of bins chosen by quantile method. '''
@@ -112,26 +81,20 @@ def assign_systematics(results):
                                   right=shift_df,
                                   on=['axis', 'global_index'])
 
-def process():
+def process(config_file):
 
     # Setup logging.
     log = logging.getLogger(__name__)
 
     start_time = time.time()
 
-    config = {}
-    config['axes'] = ['x', 'z', 'pt', 'q2']
-    config['z_range'] = [0.25, 0.75]
-    config['n_bins'] = 10
-    config['file_path'] = '/home/dmriser/data/inclusive/inclusive_kaon_small.csv'
-    config['sample_size'] = 100000
-    config['file_compression'] = 'bz2'
-    config['variation_file'] = '../../variations.json'
+    # Load config from file.
+    config = utils.load_config(config_file)
 
     # Load entire dataset, this
     # should only be done once
     # because it's 1.5 GB at load time.
-    data = load_dataset(config)
+    data = utils.load_dataset(config)
 
     # Applying nominal cuts to get the subset
     # of events that I consider good when
@@ -158,7 +121,7 @@ def process():
 
             var_time = time.time()
             log.info('Doing  %.3f < %s < %.3f' % (variations[par][index][0], par,
-                                               variations[par][index][1]))
+                                                          variations[par][index][1]))
 
             # get these cut values
             temp_dict = {}
@@ -182,5 +145,11 @@ def process():
 
 # This is quite clearly the main function.
 if __name__ == '__main__':
+
     logging.basicConfig(level=logging.DEBUG)
-    process()
+
+    ap = argparse.ArgumentParser() 
+    ap.add_argument('-c', '--config', required=True, help='Configuration file in JSON format.')
+    args = ap.parse_args()
+
+    process(args.config)

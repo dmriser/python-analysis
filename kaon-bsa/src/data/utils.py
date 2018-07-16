@@ -7,10 +7,59 @@
 # that are used in bsa.py
 #
 
+import json
 import logging
 import numpy as np
 import pandas as pd
 
+
+def load_dataset(config):
+
+    log = logging.getLogger(__name__)
+
+    # Load data and drop nan values.
+    data = pd.read_csv(config['file_path'],
+                       compression=config['file_compression'],
+                       nrows=config['sample_size'])
+    data.dropna(how='any', inplace=True)
+
+    log.info('Loaded dataset with size %d' % len(data))
+    log.debug('Dataframe details: %s', data.info())
+
+    # These axes will be kept, everything else will
+    # be dropped.
+    IMPORTANT_AXES = ['alpha', 'dist_cc', 'dist_cc_theta',
+                      'dist_dcr1', 'dist_dcr3', 'dist_ecsf',
+                      'dist_ec_edep', 'dist_ecu', 'dist_ecv',
+                      'dist_ecw', 'dist_vz', 'helicity',
+                      'missing_mass', 'p_mes', 'phi_h',
+                      'pt', 'q2', 'x', 'z', 'dvz']
+
+    # Perform the axis dropping.
+    for col in data.columns:
+        if col not in IMPORTANT_AXES:
+            data.drop(col, axis=1, inplace=True)
+
+    # Reduce memory usage and return loaded data for
+    # analysis.
+    data, _ = reduce_mem_usage(data)
+    return data
+
+def load_config(config_file):
+
+    with open(config_file, 'r') as input_file:
+        config = json.load(input_file)
+
+        # Correct the type of our options.
+        for opt in config.keys():
+            if opt == 'sample_size':
+                config[opt] = int(config[opt])
+            if opt == 'n_bins':
+                config[opt] = int(config[opt])
+            if opt == 'z_range':
+                config[opt] = [float(zp) for zp in config[opt]]
+
+    return config
 
 def build_filter(data, conf=None):
     '''
