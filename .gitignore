@@ -1,8 +1,18 @@
+# Binary files 
 *.o 
 *.a 
 *.so 
 
+# Editor files
 *~ 
 
+# Graphics 
 *.pdf
 *.png
+
+# Markdown 
+*.xml 
+
+# Files from PyCharm. 
+*.idea/* 
+
