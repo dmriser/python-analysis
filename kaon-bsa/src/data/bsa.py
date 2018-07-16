@@ -7,6 +7,7 @@
 #
 
 import json
+import logging
 import numpy as np
 import pandas as pd
 import utils
@@ -14,11 +15,16 @@ import time
 
 def load_dataset(config):
 
+    log = logging.getLogger(__name__)
+
     # Load data and drop nan values.
     data = pd.read_csv(config['file_path'],
                        compression=config['file_compression'],
                        nrows=config['sample_size'])
     data.dropna(how='any', inplace=True)
+
+    log.info('Loaded dataset with size %d' % len(data))
+    log.debug('Dataframe details: %s', data.info())
 
     # These axes will be kept, everything else will
     # be dropped.
@@ -42,6 +48,8 @@ def load_dataset(config):
 def setup_binning(config, data):
     ''' Return dictionary of bins chosen by quantile method. '''
 
+    log = logging.getLogger(__name__)
+
     bins = {}
     for axis in config['axes']:
         if axis is not 'z':
@@ -52,6 +60,7 @@ def setup_binning(config, data):
                 axis=axis,
                 n_bins=config['n_bins']
             )
+
         else:
             bins[axis] = utils.bin_by_quantile(data,
                                                axis=axis,
@@ -64,6 +73,9 @@ def load_variations(path):
     ''' Read variations json file that defines
     the different systematics that will be checked.
     '''
+
+    # Retrieve logger
+    log = logging.getLogger(__name__)
 
     # Load the dictionary from the .json file.
     with open(path, 'r') as inputfile:
@@ -79,9 +91,31 @@ def load_variations(path):
             data_type_corrected[par_name][int(level)] = list([float(data[par_name][level][0]),
                                                               float(data[par_name][level][1])])
 
+    log.debug('Loaded variations from file: %s', data_type_corrected)
+
     return data_type_corrected
 
+def assign_systematics(results):
+    ''' Start by calculating the shift between each variation and the
+    nominal result.  Then use the linearization method to calculate the
+    size of the assigned systematic uncertainty for each source.
+    '''
+    for conf in results.keys():
+        if conf is not 'nominal':
+            for val in results[conf].keys():
+                # Is this safe?  They could be in different orders.  It has been checked visually.
+                results[conf][val]['shift'] = results['nominal']['value'] - results[conf][val]['value']
+
+    shift_df, var_to_col = utils.get_linearized_error(results)
+    var_to_col['sys_0'] = 'beam_pol'
+    results['nominal'] = pd.merge(left=results['nominal'],
+                                  right=shift_df,
+                                  on=['axis', 'global_index'])
+
 def process():
+
+    # Setup logging.
+    log = logging.getLogger(__name__)
 
     start_time = time.time()
 
@@ -89,10 +123,10 @@ def process():
     config['axes'] = ['x', 'z', 'pt', 'q2']
     config['z_range'] = [0.25, 0.75]
     config['n_bins'] = 10
-    config['file_path'] = '/Users/davidriser/Data/inclusive/inclusive_kaon_small.csv'
-    config['sample_size'] = None
+    config['file_path'] = '/home/dmriser/data/inclusive/inclusive_kaon_small.csv'
+    config['sample_size'] = 100000
     config['file_compression'] = 'bz2'
-    config['variation_file'] = '/Users/davidriser/repos/python-analysis/kaon-bsa/variations.json'
+    config['variation_file'] = '../../variations.json'
 
     # Load entire dataset, this
     # should only be done once
@@ -123,7 +157,7 @@ def process():
         for index in variations[par].keys():
 
             var_time = time.time()
-            print('Doing  %.3f < %s < %.3f' % (variations[par][index][0], par,
+            log.info('Doing  %.3f < %s < %.3f' % (variations[par][index][0], par,
                                                variations[par][index][1]))
 
             # get these cut values
@@ -136,29 +170,17 @@ def process():
             results[par][index] = utils.get_results(temp_data, bins, config)
             del temp_data
 
-            end_var_time = var_time - time.time()
-            print('Elapsed time %.3f' % end_var_time)
+            end_var_time = time.time() - var_time
+            log.info('Elapsed time %.3f' % end_var_time)
 
     # Using all variations, systematic
     # uncertainties are added to the dataframe.
     assign_systematics(results)
 
     exe_time = time.time() - start_time
-    print('Finished execution in %.3f seconds.' % exe_time)
-
-def assign_systematics(results):
-    for conf in results.keys():
-        if conf is not 'nominal':
-            for val in results[conf].keys():
-                # Is this safe?  They could be in different orders.  It has been checked visually.
-                results[conf][val]['shift'] = results['nominal']['value'] - results[conf][val]['value']
-
-    shift_df, var_to_col = utils.get_linearized_error(results)
-    var_to_col['sys_0'] = 'beam_pol'
-    results['nominal'] = pd.merge(left=results['nominal'],
-                                  right=shift_df,
-                                  on=['axis', 'global_index'])
+    log.info('Finished execution in %.3f seconds.' % exe_time)
 
 # This is quite clearly the main function.
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     process()

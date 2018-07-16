@@ -10,9 +10,14 @@
 *.pdf
 *.png
 
+<<<<<<< HEAD
 # Markdown 
 *.xml 
 
 # Files from PyCharm. 
 *.idea/* 
 
+=======
+# PyCharm files
+.idea/* 
+>>>>>>> 6a1813cb01327e8784f6e0d985c069a34aa5f873
