@@ -1,3 +1,4 @@
+#!/usr/bin/env python 
 #
 # Author: David Riser
 # Date:   July 2, 2018
@@ -11,6 +12,7 @@ import json
 import logging
 import numpy as np
 import pandas as pd
+import pickle 
 import utils
 import time
 
@@ -81,6 +83,8 @@ def assign_systematics(results):
                                   right=shift_df,
                                   on=['axis', 'global_index'])
 
+    return var_to_col 
+
 def process(config_file):
 
     # Setup logging.
@@ -138,7 +142,12 @@ def process(config_file):
 
     # Using all variations, systematic
     # uncertainties are added to the dataframe.
-    assign_systematics(results)
+    systematic_sources = assign_systematics(results)
+    with open(config['systematics_file'], 'w') as outputfile:
+        pickle.dump(systematic_sources, outputfile)
+
+    # Write results to file. 
+    results['nominal'].to_csv(config['output_filename'], index=False)
 
     exe_time = time.time() - start_time
     log.info('Finished execution in %.3f seconds.' % exe_time)

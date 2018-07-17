@@ -53,7 +53,10 @@ def load_config(config_file):
         # Correct the type of our options.
         for opt in config.keys():
             if opt == 'sample_size':
-                config[opt] = int(config[opt])
+                if config[opt] == 'None':
+                    config[opt] = None
+                else:
+                    config[opt] = int(config[opt])
             if opt == 'n_bins':
                 config[opt] = int(config[opt])
             if opt == 'z_range':
