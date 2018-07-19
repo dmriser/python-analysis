@@ -149,6 +149,13 @@ def process(config_file):
     # Write results to file. 
     results['nominal'].to_csv(config['output_filename'], index=False)
 
+    # Write other results too. 
+    for key in results.keys():
+        if key != 'nominal':
+            for conf in results[key]:
+                output_filename = str(config['database_path'] + 'phi/variation-' + key + conf + '.csv')
+                results[key][conf].to_csv(output_filename, index=False)
+
     exe_time = time.time() - start_time
     log.info('Finished execution in %.3f seconds.' % exe_time)
 

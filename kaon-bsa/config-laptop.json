@@ -10,10 +10,11 @@
     "file_path": "/Users/davidriser/Data/inclusive/inclusive_kaon_small.csv",
     "n_bins": 10,
     "sample_size":"None",
-    "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations.json",
+    "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations-missing-mass.json",
     "z_range": [
         0.25,
         0.75
     ],
-    "output_filename":"/Users/davidriser/repos/python-analysis/kaon-bsa/results/phi/sys.csv"
+    "output_filename":"/Users/davidriser/repos/python-analysis/kaon-bsa/results/phi/sys.csv",
+    "database_path":"/Users/davidriser/repos/python-analysis/kaon-bsa/database/"
 }
