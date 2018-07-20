@@ -153,7 +153,7 @@ def process(config_file):
     for key in results.keys():
         if key != 'nominal':
             for conf in results[key]:
-                output_filename = str(config['database_path'] + 'phi/variation-' + key + conf + '.csv')
+                output_filename = str(config['database_path'] + 'phi/variation_' + key + '_' +str(conf) + '.csv')
                 results[key][conf].to_csv(output_filename, index=False)
 
     exe_time = time.time() - start_time
