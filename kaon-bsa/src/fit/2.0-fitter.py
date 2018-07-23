@@ -151,7 +151,23 @@ def fit(input_file, output_file, bounds, n_reps, n_proc):
     output_df = pd.DataFrame(output_data)
     output_df.to_csv(output_file, index=False)
 
+import json
+import os
+
+def setup_env(inputfile):
+
+    with open(inputfile, 'r') as infile:
+        json_dict = json.load(infile)
+
+        for key, value in json_dict.iteritems():
+            os.environ[key] = value
+
 if __name__ == "__main__":
+
+    print('Main code starting.')
+
+    print('Setting up env')
+    setup_env('/u/home/dmriser/clas/python-analysis/farm/snapshot.json')
 
     parser = argparse.ArgumentParser()
 
@@ -174,4 +190,5 @@ if __name__ == "__main__":
     else:
         bounds = [[-1,1],[-1,1],[-1,1]]
 
+    print('Command line arguments setup, calling fit.')
     fit(args.input_file, args.output_file, bounds, args.n_replicas, args.n_proc)
