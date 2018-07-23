@@ -10,29 +10,54 @@ COMMAND:   chmod +x go.csh; ./go.csh
 
 INPUT_DATA:input.csv
 
-INPUT_FILES:/u/home/dmriser/clas/python-analysis/kaon-bsa/results/phi/sys.csv 
-/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_alpha_-1.csv
+INPUT_FILES:/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_alpha_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_alpha_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-alpha-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-alpha1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_cc_0.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_cc0.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_cc_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_cc-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_dcr1_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_dcr1_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_dcr1-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_dcr11.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_dcr3_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_dcr3_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_dcr3-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_dcr31.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ec_edep_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ec_edep_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ec_edep-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ec_edep1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecsf_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecsf_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ecsf-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ecsf1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecu_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecu_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ecu-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ecu1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecv_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecv_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ecv-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ecv1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecw_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_ecw_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ecw-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_ecw1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_vz_-1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_dist_vz_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_vz-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-dist_vz1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_missing_mass_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_missing_mass_1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-missing_mass-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-missing_mass1.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_p_mes_0.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-p_mes0.csv
 /u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation_p_mes_-1.csv
+/u/home/dmriser/clas/python-analysis/kaon-bsa/database/phi/variation-p_mes-1.csv
 
 OUTPUT_DATA:out.csv 
 
@@ -40,5 +65,5 @@ OUTPUT_TEMPLATE:/u/home/dmriser/clas/python-analysis/kaon-bsa/database/fit/*
 
 OTHER_FILES:
 /u/home/dmriser/clas/python-analysis/farm/go.csh
-/u/home/dmriser/environment/conda.env 
-/u/home/dmriser/clas/python-analysis/kaon-bsa/replica-fitter.py
+/u/home/dmriser/environment/jlab-root6.env 
+/u/home/dmriser/clas/python-analysis/kaon-bsa/src/fit/2.0-fitter.py 
