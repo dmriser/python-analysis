@@ -4,7 +4,9 @@ import argparse
 import numpy as np 
 import os 
 import pandas as pd
+import time
 
+from contextlib import contextmanager 
 from multiprocessing import Process, Queue
 
 # single fit minimizer 
@@ -12,6 +14,12 @@ from scipy.optimize import minimize
 
 TO_RADIANS = np.pi/180.0
 TO_DEGREES = 1/TO_RADIANS
+
+@contextmanager
+def timer(title):
+    t0 = time.time()
+    yield
+    print("{} - done in {:.0f}s".format(title, time.time() - t0))
 
 def create_replica(y, y_err):
     y_rep = [np.random.normal(yp,np.fabs(yp_err)) for yp,yp_err in zip(y,y_err)]
@@ -126,7 +134,7 @@ def fit(input_file, output_file, bounds, n_reps, n_proc):
 
     axes = np.unique(dataset.axis)
     for axis in axes:
-        print('fitting %s' % axis)
+        print('Fitting %s' % axis)
         axis_data = dataset.query('axis == "%s"' % axis)
         
         axis_bins = np.unique(axis_data.axis_bin)
@@ -134,8 +142,9 @@ def fit(input_file, output_file, bounds, n_reps, n_proc):
             data = axis_data.query('axis_bin == %d' % axis_bin)
 
             # perform single fitting 
-            pars, errs = perform_bootstrap(loss_function, physics_model, bounds, 
-                                           data.phi, data.value, data.stat, n_reps, n_proc)
+            with timer('Performing single fit'):
+                pars, errs = perform_bootstrap(loss_function, physics_model, bounds, 
+                                               data.phi, data.value, data.stat, n_reps, n_proc)
 
             output_data['axis'].append(axis)
             output_data['axis_bin'].append(axis_bin)
@@ -151,23 +160,7 @@ def fit(input_file, output_file, bounds, n_reps, n_proc):
     output_df = pd.DataFrame(output_data)
     output_df.to_csv(output_file, index=False)
 
-import json
-import os
-
-def setup_env(inputfile):
-
-    with open(inputfile, 'r') as infile:
-        json_dict = json.load(infile)
-
-        for key, value in json_dict.iteritems():
-            os.environ[key] = value
-
-if __name__ == "__main__":
-
-    print('Main code starting.')
-
-    print('Setting up env')
-    setup_env('/u/home/dmriser/clas/python-analysis/farm/snapshot.json')
+if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
 
@@ -190,5 +183,4 @@ if __name__ == "__main__":
     else:
         bounds = [[-1,1],[-1,1],[-1,1]]
 
-    print('Command line arguments setup, calling fit.')
     fit(args.input_file, args.output_file, bounds, args.n_replicas, args.n_proc)
