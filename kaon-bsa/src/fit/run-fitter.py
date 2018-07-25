@@ -22,8 +22,8 @@ def process():
 
     input_dir  = '../../database/phi/'
     output_dir = '../../database/fit/'
-    nproc      = 2
-    nreps      = 8
+    nproc      = 8
+    nreps      = 256
 
     for f in get_files(input_dir):
         name = f.split('/')[-1]
