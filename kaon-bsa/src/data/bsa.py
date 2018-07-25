@@ -23,7 +23,7 @@ def setup_binning(config, data):
 
     bins = {}
     for axis in config['axes']:
-        if axis is not 'z':
+        if axis != 'z':
             # Setup the non-z axes to have a limited z range
             # defined in the configuration dictionary.
             bins[axis] = utils.bin_by_quantile(
@@ -37,6 +37,10 @@ def setup_binning(config, data):
                                                axis=axis,
                                                n_bins=config['n_bins']
                                                )
+
+    for key, value in bins.iteritems():
+        log.debug('Setup binning %s: %s', key, value)
+
     return bins
 
 
@@ -159,7 +163,6 @@ def process(config_file):
     exe_time = time.time() - start_time
     log.info('Finished execution in %.3f seconds.' % exe_time)
 
-# This is quite clearly the main function.
 if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
