@@ -305,7 +305,7 @@ def get_results(data, bins, config):
     df_store = []
 
     for axis in config['axes']:
-        if axis is not 'z':
+        if axis != 'z':
             df_store.append(get_asymmetry_df(data=data.query('z > %f and z < %f' % (config['z_range'][0], config['z_range'][1])),
                                              axis=axis,
                                              n_bins=len(bins[axis]),
