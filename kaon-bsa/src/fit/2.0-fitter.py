@@ -62,9 +62,12 @@ def perform_bootstrap(loss_function, physics_model, bounds,
         workers = []
 
         # spawn processes 
-        reps_per_core = int(n_replicas/n_cores)
+        reps_per_core = int( n_replicas / n_cores )
         for job in range(n_cores):
-            workers.append(Process(target=bootstrap_worker, args=(q, loss_function, physics_model, bounds, phi, data, error, reps_per_core)))
+            workers.append(Process(
+                target=bootstrap_worker,
+                args=(q, loss_function, physics_model, bounds, phi, data, error, reps_per_core))
+            )
             workers[job].start()
         
         # get results     
@@ -90,7 +93,7 @@ def perform_bootstrap(loss_function, physics_model, bounds,
         pars.append(np.average(results[:,ipar]))
         errs.append(np.std(results[:,ipar]))    
 
-    return pars, errs 
+    return results, pars, errs
 
 def physics_model(phi, a):
     return a[0]*np.sin(phi*TO_RADIANS)/(1+a[1]*np.cos(phi*TO_RADIANS)+a[2]*np.cos(2*phi*TO_RADIANS))
@@ -131,6 +134,9 @@ def fit(input_file, output_file, bounds, n_reps, n_proc):
     output_data['err_0'] = [] 
     output_data['err_1'] = []
     output_data['err_2'] = []
+    output_data['bootstraps_0'] = []
+    output_data['bootstraps_1'] = []
+    output_data['bootstraps_2'] = []
 
     axes = np.unique(dataset.axis)
     for axis in axes:
@@ -143,8 +149,10 @@ def fit(input_file, output_file, bounds, n_reps, n_proc):
 
             # perform single fitting 
             with timer('Performing single fit'):
-                pars, errs = perform_bootstrap(loss_function, physics_model, bounds, 
-                                               data.phi, data.value, data.stat, n_reps, n_proc)
+                results, pars, errs = perform_bootstrap(
+                    loss_function, physics_model, bounds, data.phi,
+                    data.value, data.stat, n_reps, n_proc
+                )
 
             output_data['axis'].append(axis)
             output_data['axis_bin'].append(axis_bin)
@@ -157,8 +165,26 @@ def fit(input_file, output_file, bounds, n_reps, n_proc):
             output_data['err_1'].append(errs[1])
             output_data['err_2'].append(errs[2])
 
+            # This is going to whack the file size up massively.
+            for index in range(3):
+                output_data['bootstraps_{}'.format(index)].append(results[:,index])
+
     output_df = pd.DataFrame(output_data)
     output_df.to_csv(output_file, index=False)
+
+def setup_parameter_bounds(args):
+    ''' Setup bounds for parameters based on
+    variable set at the CL. '''
+    if args.bounded == 'no':
+        bounds = [[-1, 1], [-1, 1], [-1, 1]]
+    elif args.bounded == 'tight':
+        bounds = [[-1, 1], [-1, 1], [-1, 1]]
+    elif args.bounded == 'single':
+        bounds = [[-1, 1], [-1e-9, 1e-9], [-1e-9, 1e-9]]
+    else:
+        bounds = [[-1, 1], [-1, 1], [-1, 1]]
+
+    return bounds
 
 if __name__ == '__main__':
 
@@ -172,15 +198,8 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--n_proc', default=4, type=int)
     args = parser.parse_args()
 
+    # obtain limits for our parameters
+    bounds = setup_parameter_bounds(args)
 
-    # parameter limits for parameters
-    if args.bounded == 'no':
-        bounds = [[-1,1],[-1,1],[-1,1]]
-    elif args.bounded == 'tight':
-        bounds = [[-1,1],[-1,1],[-1,1]]
-    elif args.bounded == 'single':
-        bounds = [[-1,1],[-1e-9,1e-9],[-1e-9,1e-9]]
-    else:
-        bounds = [[-1,1],[-1,1],[-1,1]]
-
+    # perform the fits on this data
     fit(args.input_file, args.output_file, bounds, args.n_replicas, args.n_proc)
