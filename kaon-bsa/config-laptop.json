@@ -3,7 +3,8 @@
         "x",
         "z",
         "pt",
-        "q2"
+        "q2",
+	"missing_mass"
     ],
     "file_compression": "bz2",
     "systematics_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/systematic_sources.pkl",
