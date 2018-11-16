@@ -102,7 +102,7 @@ def build_filter(data, conf=None):
     nominal_conf['dist_ecw'] = [-1.0, 1.0]
     nominal_conf['dist_ec_edep'] = [-1.0, 1.0]
     nominal_conf['dist_vz'] = [-1.0, 1.0]
-    nominal_conf['missing_mass'] = [1.25, 5.0]
+    nominal_conf['missing_mass'] = [1.575, 5.0]
     nominal_conf['p_mes'] = [0.35, 5.0]
     nominal_conf['dvz'] = [-2.5, 2.5]
 
