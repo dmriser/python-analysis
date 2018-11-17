@@ -9,13 +9,13 @@
     "file_compression": "bz2",
     "systematics_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/systematic_sources.pkl",
     "file_path": "/Users/davidriser/Data/inclusive/inclusive.csv",
-    "n_bins": 10,
+    "n_bins": 8,
     "sample_size":"None",
     "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations-missing-mass.json",
     "z_range": [
         0.25,
         0.75
     ],
-    "output_filename":"/Users/davidriser/repos/python-analysis/kaon-bsa/results/phi/sys.csv",
+    "output_filename":"/Users/davidriser/repos/python-analysis/kaon-bsa/database/phi/sys.csv",
     "database_path":"/Users/davidriser/repos/python-analysis/kaon-bsa/database/"
 }
