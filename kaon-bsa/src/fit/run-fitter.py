@@ -29,7 +29,7 @@ def process():
         name = f.split('/')[-1]
         print('Writing %s to %s' % (f, output_dir+name))
 
-        system_command = './2.0-fitter.py -i=%s -o=%s -m=%d -n=%d' % (f, output_dir+name, nproc, nreps)
+        system_command = './fitter.py -i=%s -o=%s -m=%d -n=%d' % (f, output_dir+name, nproc, nreps)
         os.system(system_command)
 
 if __name__ == '__main__':
