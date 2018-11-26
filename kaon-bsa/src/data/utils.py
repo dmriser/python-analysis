@@ -91,7 +91,7 @@ def build_filter(data, conf=None):
 
     # nominal values
     nominal_conf = {}
-    nominal_conf['alpha'] = [0.05, 1.0]
+    nominal_conf['alpha'] = [0.55, 1.0]
     nominal_conf['dist_cc'] = [-1.0, 1.0]
     nominal_conf['dist_cc_theta'] = [-1.0, 1.0]
     nominal_conf['dist_dcr1'] = [-1.0, 1.0]
@@ -102,8 +102,8 @@ def build_filter(data, conf=None):
     nominal_conf['dist_ecw'] = [-1.0, 1.0]
     nominal_conf['dist_ec_edep'] = [-1.0, 1.0]
     nominal_conf['dist_vz'] = [-1.0, 1.0]
-    nominal_conf['missing_mass'] = [1.65, 5.0]
-    nominal_conf['p_mes'] = [0.35, 5.0]
+    nominal_conf['missing_mass'] = [1.20, 5.0]
+    nominal_conf['p_mes'] = [0.35, 2.0]
     nominal_conf['dvz'] = [-4.0, 4.0]
 
     # start adding the special options

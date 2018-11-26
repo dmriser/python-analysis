@@ -9,7 +9,7 @@
     "file_compression": "bz2",
     "systematics_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/systematic_sources.pkl",
     "file_path": "/Users/davidriser/Data/inclusive/inclusive.csv",
-    "n_bins": 6,
+    "n_bins": 10,
     "sample_size":"None",
     "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations-missing-mass.json",
     "z_range": [
