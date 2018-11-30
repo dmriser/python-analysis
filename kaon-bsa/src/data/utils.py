@@ -243,7 +243,7 @@ def convert_bin_limits_to_centers(limits):
 def get_asymmetry_df(data, axis, n_bins,
                      beam_pol=0.749,
                      beam_pol_unc=0.024,
-                     n_phi_bins=12,
+                     n_phi_bins = 14,
                      custom_bin_limits=None):
     # setup the binning for the phi axis
     phi_bin_limits = np.linspace(-180, 180, n_phi_bins + 1)
