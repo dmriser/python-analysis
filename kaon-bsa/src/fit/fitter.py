@@ -104,7 +104,7 @@ def loss_function(data, theory, error):
 def perform_single(loss_function, model, bounds, 
                    phi, data, error):
 
-    func = lambda p: loss_function(data, model(phi, p), error) + 0.2 * np.sum(p**2)
+    func = lambda p: loss_function(data, model(phi, p), error) + np.sum(p**2)
     
     bad_fit = True
 
