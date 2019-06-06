@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/kaon-bsa.iml" filepath="$PROJECT_DIR$/.idea/kaon-bsa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../scrape-noticias/src/.idea/src.iml" filepath="$PROJECT_DIR$/../../scrape-noticias/src/.idea/src.iml" />
     </modules>
   </component>
 </project>

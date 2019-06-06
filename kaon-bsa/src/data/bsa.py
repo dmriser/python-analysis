@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 import pickle 
 import time
-import utils
+import bsautils as utils
 
 def setup_binning(config, data):
     ''' Return dictionary of bins chosen by quantile method. '''
