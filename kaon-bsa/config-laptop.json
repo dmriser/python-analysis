@@ -6,12 +6,12 @@
         "q2",
 	"missing_mass"
     ],
-    "file_compression": "bz2",
+    "file_compression": "gzip",
     "systematics_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/systematic_sources.pkl",
-    "file_path": "/Users/davidriser/Data/inclusive/inclusive.csv",
+    "file_path": "/Users/davidriser/Data/kaon/kaon.csv.gzip",
     "n_bins": 5,
     "sample_size":"None",
-    "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations-missing-mass.json",
+    "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations.json",
     "z_range": [
         0.25,
         0.75

@@ -34,7 +34,7 @@ def load_dataset(config):
                       'dist_ec_edep', 'dist_ecu', 'dist_ecv',
                       'dist_ecw', 'dist_vz', 'helicity',
                       'missing_mass', 'p_mes', 'phi_h',
-                      'pt', 'q2', 'x', 'z', 'dvz']
+                      'pt', 'q2', 'x', 'z', 'dvz', 'sector']
 
     # Perform the axis dropping.
     for col in data.columns:
@@ -103,13 +103,13 @@ def build_filter(data, conf=None):
     nominal_conf['dist_ecw'] = [-1.0, 1.0]
     nominal_conf['dist_ec_edep'] = [-1.0, 1.0]
     nominal_conf['dist_vz'] = [-1.0, 1.0]
-    nominal_conf['missing_mass'] = [1.20, 5.0]
+    nominal_conf['missing_mass'] = [0.0, 5.0]
     nominal_conf['p_mes'] = [0.35, 2.0]
     nominal_conf['dvz'] = [-4.0, 4.0]
 
     # start adding the special options
     if conf:
-        for k, v in conf.iteritems():
+        for k, v in conf.items():
 
             # these have to be valid
             if len(v) is not 2:
@@ -123,7 +123,7 @@ def build_filter(data, conf=None):
                 print('Problem adding filter for %s because it is not in the dataframe.columns' % k)
 
         # now add the default options for those which were not specified
-        for k, v in nominal_conf.iteritems():
+        for k, v in nominal_conf.items():
             if k not in conf.keys():
                 if k in data.columns:
                     filters.append('%s > %f and %s < %f ' % (k, v[0], k, v[1]))
@@ -135,7 +135,7 @@ def build_filter(data, conf=None):
 
 
     else:
-        for k, v in nominal_conf.iteritems():
+        for k, v in nominal_conf.items():
             if k in data.columns:
                 #                print('OPTION: %s, LIMITS: [%f,%f]' % (k,v[0],v[1]))
                 filters.append('%s > %f and %s < %f ' % (k, v[0], k, v[1]))
@@ -339,7 +339,7 @@ def save_to_database(results,
 
 def get_random_config(data, variations):
     random_configuration = {}
-    for parameter_name, stricts in variations.iteritems():
+    for parameter_name, stricts in variations.items():
         min_strict = min(stricts.keys())
         max_strict = max(stricts.keys())
 
@@ -434,7 +434,7 @@ def get_largest_shifts(results):
                     column_title = 'sys_%d' % i_par
 
                     d, v = get_global_bin_data(results['nominal'], results[par], axis, index)
-                    current_shifts = [val['shift'].values[0] for key, val in v.iteritems()]
+                    current_shifts = [val['shift'].values[0] for key, val in v.items()]
                     df_dict[column_title].append(np.max(np.abs(current_shifts)))
                     i_par += 1
 
@@ -532,7 +532,7 @@ def get_linearized_error(results):
 def get_global_bin(results, axis, bin):
     r = []
 
-    for key, value in results.iteritems():
+    for key, value in results.items():
         r.append(value.query('axis == "%s" and global_index == %d' % (axis, bin)).value.values[0])
 
     return np.array(r, dtype=np.float32)

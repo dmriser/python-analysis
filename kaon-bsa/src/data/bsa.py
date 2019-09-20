@@ -38,7 +38,7 @@ def setup_binning(config, data):
                                                n_bins=config['n_bins']
                                                )
 
-    for key, value in bins.iteritems():
+    for key, value in bins.items():
         log.debug('Setup binning %s: %s', key, value)
 
     return bins
@@ -59,7 +59,7 @@ def load_variations(path):
     # Replace all strings on the second level
     # with integers.
     data_type_corrected = {}
-    for par_name, levels in data.iteritems():
+    for par_name, levels in data.items():
         data_type_corrected[par_name] = {}
 
         for level in levels:
@@ -75,9 +75,16 @@ def assign_systematics(results):
     nominal result.  Then use the linearization method to calculate the
     size of the assigned systematic uncertainty for each source.
     '''
+    log = logging.getLogger(__name__)
+    
+    dont_write = ['sector{}'.format(s) for s in range(1,7)]
+    dont_write.append('nominal')
     for conf in results.keys():
-        if conf is not 'nominal':
+        if conf not in dont_write:
             for val in results[conf].keys():
+                log.debug('Assigning systematics for config {} with value {}'.format(conf, val))
+                log.debug('Type of object {}'.format(type(results[conf][val]['value'])))
+
                 # Is this safe?  They could be in different orders.  It has been checked visually.
                 results[conf][val]['shift'] = results['nominal']['value'] - results[conf][val]['value']
 
@@ -117,6 +124,21 @@ def process(config_file):
     # Calculate the results for the nominal subset of data.
     results = {}
     results['nominal'] = utils.get_results(nominal_data, bins, config)
+
+    # Calculate the results for each sector.
+    for sector in range(1,7):
+        var_time = time.time()
+        log.info('Doing sector {}'.format(sector))
+
+        sector_data = nominal_data[nominal_data['sector'] == sector]
+        sect_result = utils.get_results(sector_data, bins, config)
+
+        elapsed_time = time.time() - var_time
+        log.info('Elapsed time %.3f' % elapsed_time)
+
+        output_filename = str(config['database_path'] + 'phi/sector_' + str(sector) + '.csv')
+        sect_result.to_csv(output_filename, index=False)
+
     del nominal_data
 
     # Define variations to consider.  These
@@ -147,15 +169,18 @@ def process(config_file):
     # Using all variations, systematic
     # uncertainties are added to the dataframe.
     systematic_sources = assign_systematics(results)
-    with open(config['systematics_file'], 'w') as outputfile:
-        pickle.dump(systematic_sources, outputfile)
-
+    with open(config['systematics_file'], 'wb') as outputfile:
+            pickle.dump(systematic_sources, outputfile)
+    #pickle.dump(systematic_sources, config['systematics_file'])
+    
     # Write results to file. 
     results['nominal'].to_csv(config['output_filename'], index=False)
-
+    
     # Write other results too. 
+    dont_write = ['sector'.format(s) for s in range(1,7)]
+    dont_write.append('nominal')
     for key in results.keys():
-        if key != 'nominal':
+        if key not in dont_write:
             for conf in results[key]:
                 output_filename = str(config['database_path'] + 'phi/variation_' + key + '_' +str(conf) + '.csv')
                 results[key][conf].to_csv(output_filename, index=False)
