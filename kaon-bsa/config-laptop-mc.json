@@ -7,14 +7,13 @@
     ],
     "file_compression": "gzip",
     "systematics_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/systematic_sources.pkl",
-    "file_path": "/Users/davidriser/Data/kaon/kaon.csv.gzip",
+    "file_path": "/Users/davidriser/Data/kaon/kaon_gen_asym.csv.gzip",
     "n_bins": 5,
-    "sample_size":"None",
-    "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations.json",
+    "sample_size":"500000",
     "z_range": [
         0.25,
         0.75
     ],
-    "output_filename":"/Users/davidriser/repos/python-analysis/kaon-bsa/database/phi/sys.csv",
+    "output_filename":"/Users/davidriser/repos/python-analysis/kaon-bsa/database/phi/monte_carlo.csv",
     "database_path":"/Users/davidriser/repos/python-analysis/kaon-bsa/database/"
 }

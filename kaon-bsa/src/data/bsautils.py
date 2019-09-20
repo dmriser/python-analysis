@@ -34,7 +34,7 @@ def load_dataset(config):
                       'dist_ec_edep', 'dist_ecu', 'dist_ecv',
                       'dist_ecw', 'dist_vz', 'helicity',
                       'missing_mass', 'p_mes', 'phi_h',
-                      'pt', 'q2', 'x', 'z', 'dvz', 'sector']
+                      'pt', 'q2', 'x', 'z', 'sector']
 
     # Perform the axis dropping.
     for col in data.columns:
@@ -105,7 +105,6 @@ def build_filter(data, conf=None):
     nominal_conf['dist_vz'] = [-1.0, 1.0]
     nominal_conf['missing_mass'] = [0.0, 5.0]
     nominal_conf['p_mes'] = [0.35, 2.0]
-    nominal_conf['dvz'] = [-4.0, 4.0]
 
     # start adding the special options
     if conf:
