@@ -41,7 +41,7 @@ if __name__ == '__main__':
                 plt.grid(alpha=0.1)
 
                 plt.subplot(2,1,2)
-                plt.hist(residual, bins=np.linspace(-0.2, 0.2, 20), edgecolor='k', color='orange', alpha=0.6)
+                Plt.hist(residual, bins=np.linspace(-0.2, 0.2, 20), edgecolor='k', color='orange', alpha=0.6)
                 
                 plt.savefig('image/sectors/compare_{}_{}.pdf'.format(i,j))
                 plt.close()

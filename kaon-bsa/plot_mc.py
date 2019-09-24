@@ -49,24 +49,29 @@ if __name__ == '__main__':
     plt.errorbar(xdata['axis_value'], xdata['par_0'], xdata['err_0'],
                  linestyle='', marker='o', color='k')
     plt.plot(x,x_model)
+    plt.grid(alpha=0.2)
     plt.title('x')
     
     plt.subplot(2,2,2)
     plt.errorbar(zdata['axis_value'], zdata['par_0'], zdata['err_0'],
                  linestyle='', marker='o', color='k')
     plt.plot(z,z_model)
+    plt.grid(alpha=0.2)
     plt.title('z')
     
     plt.subplot(2,2,3)
     plt.errorbar(ptdata['axis_value'], ptdata['par_0'], ptdata['err_0'],
                  linestyle='', marker='o', color='k')
     plt.plot(pt,pt_model)
+    plt.grid(alpha=0.2)
     plt.title('pt')
     
     plt.subplot(2,2,4)
     plt.errorbar(q2data['axis_value'], q2data['par_0'], q2data['err_0'],
                  linestyle='', marker='o', color='k')
+    plt.grid(alpha=0.2)
     plt.title('q2')
 
     plt.tight_layout()
-    plt.show()
+    #    plt.show()
+    plt.savefig('image/mc_compare_to_gen.pdf')

@@ -32,5 +32,6 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt 
     plt.rc('font', family='serif')
     plt.rc('font', size=16)
-    plt.errorbar(bins, vals, errs, linestyle='', color='black', marker='.')
+    plt.errorbar(bins, vals, errs, linestyle='', color='black', marker='o', alpha=0.8)
+    plt.grid(alpha=0.2)
     plt.show()
