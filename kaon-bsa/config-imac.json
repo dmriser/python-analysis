@@ -1,0 +1,20 @@
+{
+    "axes": [
+        "x",
+        "z",
+        "pt",
+        "q2"
+    ],
+    "file_compression": "gzip",
+    "systematics_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/systematic_sources.pkl",
+    "file_path": "/Users/davidriser/data/kaon/kaon.csv.gzip",
+    "n_bins": 5,
+    "sample_size":"None",
+    "variation_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/variations.json",
+    "z_range": [
+        0.25,
+        0.75
+    ],
+    "output_filename":"/Users/davidriser/repos/python-analysis/kaon-bsa/database/phi/sys.csv",
+    "database_path":"/Users/davidriser/repos/python-analysis/kaon-bsa/database/"
+}
