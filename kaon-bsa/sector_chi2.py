@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
     chi2 = np.empty(npoints)
     chi2_sys = np.empty(npoints)
+    chi2_sys_no_shift = np.empty(npoints)
     for i in range(npoints):
         
         x = np.array([data[s].iloc[i]['value'] for s in range(6)])
@@ -47,23 +48,29 @@ if __name__ == "__main__":
 
         chi2[i] = weighted_chi2(x, xerr)
 
-        x = np.array([data_sys[s].iloc[i]['mc_mean'] for s in range(6)])
+
         xerr = xerr**2
         for s in range(6):
             xerr[s] += data_sys[s].iloc[i]['mc_std']**2
         xerr = np.sqrt(xerr)
 
+        chi2_sys_no_shift[i] = weighted_chi2(x, xerr)
+        
+        x = np.array([data_sys[s].iloc[i]['mc_mean'] for s in range(6)])
         chi2_sys[i] = weighted_chi2(x, xerr)
 
 
-    print(chi2 / 6.0)
-    print(chi2_sys / 6.0)
+    #print(chi2 / 6.0)
+    #print(chi2_sys / 6.0)
+    #print(chi2_sys_no_shift / 6.0)
 
     goodpts = np.where(chi2 / 6.0 < 1.001)[0]
     goodpts_sys = np.where(chi2_sys / 6.0 < 1.001)[0]
+    goodpts_sys_no_shift = np.where(chi2_sys_no_shift / 6.0 < 1.001)[0]
 
     print(f'{len(goodpts)} good points without sys')
     print(f'{len(goodpts_sys)} good points with sys')
+    print(f'{len(goodpts_sys_no_shift)} good points with sys (no shift)')
 
     
     # Start Plotting
