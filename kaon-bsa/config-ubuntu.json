@@ -1,0 +1,20 @@
+{
+    "axes": [
+        "x",
+        "z",
+        "pt",
+        "q2"
+    ],
+    "file_compression": "None",
+    "systematics_file": "/home/david/repos/python-analysis/kaon-bsa/systematic_sources.pkl",
+    "file_path": "/home/david/data/kaon/kaon.csv",
+    "n_bins": 5,
+    "sample_size":"None",
+    "variation_file": "/home/david/repos/python-analysis/kaon-bsa/variations.json",
+    "z_range": [
+        0.25,
+        0.75
+    ],
+    "output_filename":"/home/david/repos/python-analysis/kaon-bsa/database/phi/sys.csv",
+    "database_path":"/home/david/repos/python-analysis/kaon-bsa/database/"
+}

@@ -18,10 +18,14 @@ def load_dataset(config):
 
     log = logging.getLogger(__name__)
 
-    # Load data and drop nan values.
-    data = pd.read_csv(config['file_path'],
-                       compression=config['file_compression'],
-                       nrows=config['sample_size'])
+    if config['file_compression'] != "None":
+        data = pd.read_csv(config['file_path'],
+                           compression=config['file_compression'],
+                           nrows=config['sample_size'])
+    else:
+        data = pd.read_csv(config['file_path'],
+                           nrows=config['sample_size'])
+
     data.dropna(how='any', inplace=True)
 
     log.info('Loaded dataset with size %d' % len(data))
@@ -34,7 +38,7 @@ def load_dataset(config):
                       'dist_ec_edep', 'dist_ecu', 'dist_ecv',
                       'dist_ecw', 'dist_vz', 'helicity',
                       'missing_mass', 'p_mes', 'phi_h',
-                      'pt', 'q2', 'x', 'z', 'sector']
+                      'pt', 'q2', 'x', 'z', 'sector', 'sector_k']
 
     # Perform the axis dropping.
     for col in data.columns:
