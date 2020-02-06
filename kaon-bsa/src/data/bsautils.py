@@ -120,7 +120,7 @@ def build_filter(data, conf=None):
                 return filters
 
             if k in data.columns:
-                filters.append('%s > %f and %s < %f' % (k, v[0], k, v[1]))
+                filters.append('%s > %f and %s < %f' % (k, float(v[0]), k, float(v[1])))
             # print('OPTION: %s, LIMITS: [%f,%f]' % (k,v[0],v[1]))
             else:
                 print('Problem adding filter for %s because it is not in the dataframe.columns' % k)
@@ -163,7 +163,11 @@ def build_dataframe(data, filters):
 
         return d
 
-
+def randomize_sector(data):
+    npts = len(data)
+    sectors = np.arange(1,7)
+    data['sector'] = np.random.choice(sectors, npts)
+    
 def reduce_mem_usage(props):
     ''' Taken from Kaggle, if I can find the kernel
     I will give proper credit.  If function is yours

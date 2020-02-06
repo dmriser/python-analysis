@@ -20,7 +20,7 @@ def load_data():
     data = []
     data_sys = []
     for i in range(1,7):
-        data.append(pd.read_csv('database/phi/sector_{}.csv'.format(i)))
+        data.append(pd.read_csv('database/phi/bootstrap_est_sector_{}.csv'.format(i)))
         data[i-1] = data[i-1][data[i-1]['axis'] != "missing_mass"]
         data_sys.append(pd.read_csv('database/phi/random/systematics_{}.csv'.format(i)))
 
@@ -64,9 +64,9 @@ if __name__ == "__main__":
     #print(chi2_sys / 6.0)
     #print(chi2_sys_no_shift / 6.0)
 
-    goodpts = np.where(chi2 / 6.0 < 1.001)[0]
-    goodpts_sys = np.where(chi2_sys / 6.0 < 1.001)[0]
-    goodpts_sys_no_shift = np.where(chi2_sys_no_shift / 6.0 < 1.001)[0]
+    goodpts = np.where(chi2 / 6. < 1.001)[0]
+    goodpts_sys = np.where(chi2_sys / 6. < 1.001)[0]
+    goodpts_sys_no_shift = np.where(chi2_sys_no_shift / 6. < 1.001)[0]
 
     print(f'{len(goodpts)} good points without sys')
     print(f'{len(goodpts_sys)} good points with sys')

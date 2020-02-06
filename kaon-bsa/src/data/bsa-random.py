@@ -117,7 +117,12 @@ def process(config_file, samples):
     # using the "best" cut values.
     nominal_filter = utils.build_filter(data)
     nominal_data   = utils.build_dataframe(data, nominal_filter)
-
+    
+    # Randomize the sectors to test
+    # if we can at least get the same
+    # answer.
+    utils.randomize_sector(data)
+    
     varfile = os.path.dirname(__file__) + '/../../variations.json'
     variations = load_variations(varfile)
 

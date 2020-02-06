@@ -96,6 +96,37 @@ def assign_systematics(results):
 
     return var_to_col 
 
+def build_bayesian_optimized_config(
+        alpha_min=0.55, alpha_max=1.0,
+        dist_cc_min=-1.0, dist_cc_max=1.0,
+        dist_cc_theta_min=-1.0, dist_cc_theta_max=1.0,
+        dist_dcr1_min=-1.0, dist_dcr1_max=1.0,
+        dist_dcr3_min=-1.0, dist_dcr3_max=1.0,
+        dist_ecsf_min=-1.0, dist_ecsf_max=1.0,
+        dist_ecu_min=-1.0, dist_ecu_max=1.0,
+        dist_ecv_min=-1.0, dist_ecv_max=1.0,
+        dist_ecw_min=-1.0, dist_ecw_max=1.0,
+        dist_ec_edep_min=-1.0, dist_ec_edep_max=1.0,
+        dist_vz_min=-1.0, dist_vz_max=1.0,
+        missing_mass_min=0.0, missing_mass_max=5.0,
+        p_mes_min=0.35, p_mes_max=2.0):
+
+    conf = {}
+    conf['alpha'] = [alpha_min, alpha_max]
+    conf['dist_cc'] = [dist_cc_min, dist_cc_max]
+    conf['dist_cc_theta'] = [dist_cc_theta_min, dist_cc_theta_max]
+    conf['dist_dcr1'] = [dist_dcr1_min, dist_dcr1_max]
+    conf['dist_dcr3'] = [dist_dcr3_min, dist_dcr3_max]
+    conf['dist_ecsf'] = [dist_ecsf_min, dist_ecsf_max]
+    conf['dist_ecu'] = [dist_ecu_min, dist_ecu_max]
+    conf['dist_ecv'] = [dist_ecv_min, dist_ecv_max]
+    conf['dist_ecw'] = [dist_ecw_min, dist_ecw_max]
+    conf['dist_ec_edep'] = [dist_ec_edep_min, dist_ec_edep_max]
+    conf['dist_vz'] = [dist_vz_min, dist_vz_max]
+    conf['missing_mass'] = [0.0, 5.0]
+    conf['p_mes'] = [p_mes_min, p_mes_max]
+    return conf 
+    
 def process(config_file):
 
     # Setup logging.
@@ -110,11 +141,23 @@ def process(config_file):
     # should only be done once
     # because it's 1.5 GB at load time.
     data = utils.load_dataset(config)
-
+    utils.randomize_sector(data)
+    
     # Applying nominal cuts to get the subset
     # of events that I consider good when
     # using the "best" cut values.
-    nominal_filter = utils.build_filter(data)
+    if args.bayes_opt_pars is not None:
+        log.info("Using Bayesian Optimized parameters for nominal.")
+        with open(args.bayes_opt_pars, 'rb') as f:
+            bayes_pars = pickle.load(f)
+
+        params = {str(k):float(v) for k,v in bayes_pars['params'].items()}
+        bayes_conf = build_bayesian_optimized_config(**params)
+        nominal_filter = utils.build_filter(data,bayes_conf)
+
+    else:
+        nominal_filter = utils.build_filter(data)
+
     nominal_data   = utils.build_dataframe(data, nominal_filter)
 
     # Use quantile binning to get integrated bins
@@ -194,6 +237,7 @@ if __name__ == '__main__':
 
     ap = argparse.ArgumentParser() 
     ap.add_argument('-c', '--config', required=True, help='Configuration file in JSON format.')
+    ap.add_argument('--bayes_opt_pars', default=None)
     args = ap.parse_args()
 
     process(args.config)
