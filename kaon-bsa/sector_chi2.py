@@ -9,6 +9,7 @@ systematics.
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy import stats
 
 def weighted_chi2(x, xerr):
     weights = 1.0 / xerr**2
@@ -20,9 +21,12 @@ def load_data():
     data = []
     data_sys = []
     for i in range(1,7):
-        data.append(pd.read_csv('database/phi/bootstrap_est_sector_{}.csv'.format(i)))
+        data.append(pd.read_csv('database/phi/sector_{}.csv'.format(i)))
         data[i-1] = data[i-1][data[i-1]['axis'] != "missing_mass"]
         data_sys.append(pd.read_csv('database/phi/random/systematics_{}.csv'.format(i)))
+        #data.append(pd.read_csv('database/phi/bootstrap_est_sector_{}.csv'.format(i)))
+        #data[i-1] = data[i-1][data[i-1]['axis'] != "missing_mass"]
+        #data_sys.append(pd.read_csv('database/phi/random/systematics_{}.csv'.format(i)))
 
     return data, data_sys
 
@@ -30,6 +34,14 @@ if __name__ == "__main__":
 
     data, data_sys = load_data()
 
+    #data_op = [] 
+    #for i in range(1,7):
+    #    data_op.append(pd.read_csv('database/phi/sector_{}.csv'.format(i)))
+    #    data_op[i-1] = data[i-1][data[i-1]['axis'] != "missing_mass"]
+    #
+    #    for i in range(1,7):
+    #        data[i-1]['value'] = data_op[i-1]['value']
+        
     npoints = 240
 
     chi2 = np.empty(npoints)
@@ -90,4 +102,34 @@ if __name__ == "__main__":
     plt.legend(frameon=False)
     plt.savefig('compare_methods_sector_x_1.pdf', bbox_inches='tight')
     plt.close()
+
+
+    rv = stats.chi2(6)
+    x = np.linspace(0,24,100)
+    probs = rv.pdf(x)
+    plt.hist(chi2, bins=np.linspace(0,24,40), edgecolor='k',
+             density=True);
+    plt.plot(x,probs)
+    plt.grid(alpha=0.2)
+    plt.xlabel('$\chi^2$')
+    plt.savefig('sector_chi2_hist.pdf', bbox_inches='tight')
+    plt.close()
+
+    plt.hist(chi2_sys_no_shift, bins=np.linspace(0,24,40), edgecolor='k',
+             density=True);
+    plt.plot(x,probs)
+    plt.grid(alpha=0.2)
+    plt.xlabel('$\chi^2$')
+    plt.savefig('sector_chi2_sys_hist.pdf', bbox_inches='tight')
+    plt.close()
+
+    
+    plt.hist(chi2_sys, bins=np.linspace(0,24,40), edgecolor='k',
+             density=True);
+    plt.plot(x,probs)
+    plt.grid(alpha=0.2)
+    plt.xlabel('$\chi^2$')
+    plt.savefig('sector_chi2_sys_shift_hist.pdf', bbox_inches='tight')
+    plt.close()
+
     
