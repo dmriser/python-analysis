@@ -5,9 +5,9 @@
         "pt",
         "q2"
     ],
-    "file_compression": "gzip",
+    "file_compression": "None",
     "systematics_file": "/Users/davidriser/repos/python-analysis/kaon-bsa/systematic_sources.pkl",
-    "file_path": "/Users/davidriser/Data/kaon/kaon_gen_asym.csv.gzip",
+    "file_path": "/Users/davidriser/Data/kaon/kaon_gen_asym_test.csv",
     "n_bins": 5,
     "sample_size":"None",
     "z_range": [

@@ -54,15 +54,17 @@ def process(config_file):
     config = utils.load_config(config_file)
  
     nominal_conf = {}
-    nominal_conf['alpha'] = [0.55, 1.0]
-    nominal_conf['missing_mass'] = [0.0, 5.0]
-    nominal_conf['p_mes'] = [0.35, 2.0]
+    #nominal_conf['alpha'] = [0.55, 1.0]
+    #nominal_conf['missing_mass'] = [0.0, 5.0]
+    nominal_conf['p_mes'] = [0.35, 1.8]
     
     # Load entire dataset, this
     # should only be done once
     # because it's 1.5 GB at load time.
     data = utils.load_dataset(config)
-
+    #data = data.dropna(how='any')
+    print(data.info())
+    
     # Applying nominal cuts to get the subset
     # of events that I consider good when
     # using the "best" cut values.
@@ -73,7 +75,9 @@ def process(config_file):
     # for the axes listed in the configuration.
     #bins = setup_binning(config, nominal_data)
     bins = setup_binning(config, data)
-
+    #kin_limits = find_kinematic_limits_in_bins(data, bins)
+    #kin_limits.to_csv('kinematic_limits_mc.csv', index = False)
+    
     # Calculate the results for the nominal subset of data.
     results = utils.get_results(data, bins, config)
     results.to_csv(config['output_filename'], index=False)

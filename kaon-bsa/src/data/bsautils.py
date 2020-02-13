@@ -38,7 +38,8 @@ def load_dataset(config):
                       'dist_ec_edep', 'dist_ecu', 'dist_ecv',
                       'dist_ecw', 'dist_vz', 'helicity',
                       'missing_mass', 'p_mes', 'phi_h',
-                      'pt', 'q2', 'x', 'z', 'sector', 'sector_k']
+                      'pt', 'q2', 'x', 'z', 'sector', 'sector_k',
+                      'g_x', 'g_z', 'g_pt', 'g_q2', 'g_asym']
 
     # Perform the axis dropping.
     for col in data.columns:

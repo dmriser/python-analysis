@@ -7,20 +7,14 @@ import pandas as pd
 def asymmetry_model(x, z, pt):
     return 0.72 * x * (1 - x) * z * pt
 
-def asymmetry_model_x(x):
-    return 0.72 * x * (1 - x) * 0.5 * 0.5
-
-def asymmetry_model_z(z):
-    return 0.72 * z * 0.5 / 6.0
-
-def asymmetry_model_pt(pt):
-    return 0.72 * pt * 0.5 / 6.0
-
 def integral(f,a,b):
     return f(b) - f(a)
 
 def integ_x(x):
     return (x**2 / 2.) - (x**3 / 3.)
+
+def integ_q2(x):
+    return x
 
 def integ_z(x):
     return (x**2 / 2.)
@@ -28,62 +22,69 @@ def integ_z(x):
 def integ_pt(x):
     return (x**2 / 2.)
 
+def asymmetry_model_x(x, nz, npt, nq2):
+    return 0.72 * x * (1 - x) * nz * npt
+
+def asymmetry_model_z(z, nx, npt, nq2):
+    return 0.72 * z * nx * npt
+
+def asymmetry_model_pt(pt, nx, nz, nq2):
+    return 0.72 * pt * nx * nz
+
+def asymmetry_model_q2(nx, nz, npt):
+    return 0.72 * nx * nz * npt
+
+
 if __name__ == '__main__':
 
     input_filename = 'database/fit/monte_carlo.csv'
+    kinematic_limits_filename = 'kinematic_limits_mc.csv'
+    kin = pd.read_csv(kinematic_limits_filename)
 
     # Load the answers.
     data = pd.read_csv(input_filename)
 
     # Add some important imfornation 
-    data['axis_value'] = data['axis_min'] + 0.5 * (data['axis_max'] - data['axis_min']) 
+    data['axis_value'] = data['axis_min'] + 0.5 * (data['axis_max'] - data['axis_min'])
 
     # Normalization factors (rough)
-    nx = 1.0 / 6.0
-    nz = 0.5
-    npt = 0.5
-
     xdata = data[data['axis'] == "x"]
     zdata = data[data['axis'] == "z"]
     ptdata = data[data['axis'] == "pt"]
     q2data = data[data['axis'] == "q2"]
 
-    x = np.linspace(0.1, 0.5, 100)
-    x_model = asymmetry_model_x(x)
-
-    z = np.linspace(0.1, 0.9, 100)
-    z_model = asymmetry_model_z(z)
-
-    pt = np.linspace(0.05, 1.2, 100)
-    pt_model = asymmetry_model_pt(pt)
-
+    xpred = kin[kin['axis'] == "x"]
+    q2pred = kin[kin['axis'] == "q2"]
+    zpred = kin[kin['axis'] == "z"]
+    ptpred = kin[kin['axis'] == "pt"]
+    
     plt.subplot(2,2,1)
     plt.errorbar(xdata['axis_value'], xdata['par_0'], xdata['err_0'],
                  linestyle='', marker='o', color='k')
-    plt.plot(x,x_model)
+    plt.plot(xdata['axis_value'], xpred['gen'] * xpred['volume'])
     plt.grid(alpha=0.2)
     plt.title('x')
-    
+
     plt.subplot(2,2,2)
     plt.errorbar(zdata['axis_value'], zdata['par_0'], zdata['err_0'],
                  linestyle='', marker='o', color='k')
-    plt.plot(z,z_model)
+    plt.plot(zdata['axis_value'], zpred['gen'] * zpred['volume'])
     plt.grid(alpha=0.2)
     plt.title('z')
     
     plt.subplot(2,2,3)
     plt.errorbar(ptdata['axis_value'], ptdata['par_0'], ptdata['err_0'],
                  linestyle='', marker='o', color='k')
-    plt.plot(pt,pt_model)
+    plt.plot(ptdata['axis_value'],ptpred['gen'] * ptpred['volume'])
     plt.grid(alpha=0.2)
     plt.title('pt')
     
     plt.subplot(2,2,4)
     plt.errorbar(q2data['axis_value'], q2data['par_0'], q2data['err_0'],
                  linestyle='', marker='o', color='k')
+    plt.plot(q2data['axis_value'], q2pred['gen'] * q2pred['volume'])
     plt.grid(alpha=0.2)
     plt.title('q2')
 
     plt.tight_layout()
-    #    plt.show()
     plt.savefig('image/mc_compare_to_gen.pdf')
