@@ -75,6 +75,9 @@ def process(config_file):
     # for the axes listed in the configuration.
     #bins = setup_binning(config, nominal_data)
     bins = setup_binning(config, data)
+    with open('binning_mc.pkl', 'wb') as binf:
+        pickle.dump(bins, binf)
+
     #kin_limits = find_kinematic_limits_in_bins(data, bins)
     #kin_limits.to_csv('kinematic_limits_mc.csv', index = False)
     

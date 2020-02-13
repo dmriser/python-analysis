@@ -40,13 +40,18 @@ if __name__ == '__main__':
     input_filename = 'database/fit/monte_carlo.csv'
     kinematic_limits_filename = 'kinematic_limits_mc.csv'
     kin = pd.read_csv(kinematic_limits_filename)
-
+    kin['var'] /= 50.
+    
     # Load the answers.
     data = pd.read_csv(input_filename)
 
     # Add some important imfornation 
     data['axis_value'] = data['axis_min'] + 0.5 * (data['axis_max'] - data['axis_min'])
 
+    bpol = 0.75
+    data['par_0'] *= bpol
+    data['err_0'] *= bpol
+    
     # Normalization factors (rough)
     xdata = data[data['axis'] == "x"]
     zdata = data[data['axis'] == "z"]
@@ -61,28 +66,32 @@ if __name__ == '__main__':
     plt.subplot(2,2,1)
     plt.errorbar(xdata['axis_value'], xdata['par_0'], xdata['err_0'],
                  linestyle='', marker='o', color='k')
-    plt.plot(xdata['axis_value'], xpred['gen'] * xpred['volume'])
+    plt.errorbar(xdata['axis_value'], xpred['expval'], np.sqrt(xpred['var']),
+                 linestyle='',  marker='o')
     plt.grid(alpha=0.2)
     plt.title('x')
 
     plt.subplot(2,2,2)
     plt.errorbar(zdata['axis_value'], zdata['par_0'], zdata['err_0'],
                  linestyle='', marker='o', color='k')
-    plt.plot(zdata['axis_value'], zpred['gen'] * zpred['volume'])
+    plt.errorbar(zdata['axis_value'], zpred['expval'], np.sqrt(zpred['var']),
+                     linestyle='',  marker='o')
     plt.grid(alpha=0.2)
     plt.title('z')
     
     plt.subplot(2,2,3)
     plt.errorbar(ptdata['axis_value'], ptdata['par_0'], ptdata['err_0'],
                  linestyle='', marker='o', color='k')
-    plt.plot(ptdata['axis_value'],ptpred['gen'] * ptpred['volume'])
+    plt.errorbar(ptdata['axis_value'], ptpred['expval'], np.sqrt(ptpred['var']),
+                     linestyle='',  marker='o')
     plt.grid(alpha=0.2)
     plt.title('pt')
     
     plt.subplot(2,2,4)
     plt.errorbar(q2data['axis_value'], q2data['par_0'], q2data['err_0'],
                  linestyle='', marker='o', color='k')
-    plt.plot(q2data['axis_value'], q2pred['gen'] * q2pred['volume'])
+    plt.errorbar(q2data['axis_value'], q2pred['expval'], np.sqrt(q2pred['var']),
+                     linestyle='',  marker='o')
     plt.grid(alpha=0.2)
     plt.title('q2')
 

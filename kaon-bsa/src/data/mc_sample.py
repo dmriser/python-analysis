@@ -71,8 +71,8 @@ def find_kinematic_limits_in_bins(data, bins):
     #data_dict['pt_min'] = []
     #data_dict['pt_max'] = []
     #data_dict['pt_avg'] = []
-    data_dict['gen'] = []
-    data_dict['volume'] = []
+    data_dict['expval'] = []
+    data_dict['var'] = []
     
     for axis in axes:
         for i in range(len(bins[axis]) - 1):
@@ -80,34 +80,35 @@ def find_kinematic_limits_in_bins(data, bins):
 
             indices = np.logical_and(data[axis] > bins[axis][i], data[axis] < bins[axis][i+1])
             sample = data[indices]
+
+            if axis is not 'z':
+                sample = sample[np.logical_and(sample['z'] > 0.25, sample['z'] < 0.75)]
+
             npoints = len(sample)
             #if npoints > 10000:
             #    npoints = 10000
                 
             total = 0.
+            total2 = 0.
             for isamp in tqdm.tqdm(range(npoints)):
-                total += asymmetry_model(
+                asym = asymmetry_model(
                     x = sample['g_x'].values[isamp],
                     z = sample['g_z'].values[isamp],
                     pt = sample['g_pt'].values[isamp]
                 )
+                total += asym
                 #total += sample['g_asym'].values[isamp]
+                total2 += asym**2
                 
-            data_dict['gen'].append(total / float(npoints))
+            data_dict['expval'].append(total / float(npoints))
+            data_dict['var'].append((total2 - (total/float(npoints))**2) / float(npoints))
             #data_dict['gen'].append(total)
             data_dict['axis'].append(axis)
             data_dict['axis_bin'].append(i)
-
-            volume = 1.
-            for second_axis in axes:
-                amin, amax = min(sample[second_axis]), max(sample[second_axis])
-                volume *= (amax - amin)
-
-            data_dict['volume'].append(volume)
             
     return pd.DataFrame(data_dict)
                 
-def process(config_file):
+def process(config_file, binfile):
 
     # Setup logging.
     log = logging.getLogger(__name__)
@@ -126,7 +127,13 @@ def process(config_file):
     # should only be done once
     # because it's 1.5 GB at load time.
     data = utils.load_dataset(config)
-    bins = setup_binning(config, data)
+
+    if binfile is not None:
+        with open(binfile, 'rb') as bfile:
+            bins = pickle.load(bfile)
+    else:
+        bins = setup_binning(config, data)
+
     kin_limits = find_kinematic_limits_in_bins(data, bins)
     kin_limits.to_csv('kinematic_limits_mc.csv', index = False)
     
@@ -137,6 +144,7 @@ if __name__ == '__main__':
 
     ap = argparse.ArgumentParser() 
     ap.add_argument('-c', '--config', required=True, help='Configuration file in JSON format.')
+    ap.add_argument('-b', '--bins', default=None, type=str)
     args = ap.parse_args()
 
-    process(args.config)
+    process(args.config, args.bins)
