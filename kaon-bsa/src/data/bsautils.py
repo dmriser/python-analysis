@@ -109,7 +109,7 @@ def build_filter(data, conf=None):
     nominal_conf['dist_ec_edep'] = [-1.0, 1.0]
     nominal_conf['dist_vz'] = [-1.0, 1.0]
     nominal_conf['missing_mass'] = [0.0, 5.0]
-    nominal_conf['p_mes'] = [0.35, 2.0]
+    nominal_conf['p_mes'] = [0.35, 1.7]
 
     # start adding the special options
     if conf:
